@@ -56,6 +56,14 @@ http://127.0.0.1:8000/
 
 ---
 
+## 🌐 Live Demo
+
+You can view the deployed application here:
+
+👉 https://sentix-ai-2b7w.onrender.com/
+
+---
+
 ## Additional Information
 
 - The project uses the NLTK VADER model for sentiment analysis.
