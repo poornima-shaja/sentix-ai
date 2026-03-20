@@ -11,7 +11,6 @@ from django.urls import reverse
 from .models import *
 import string
 from collections import Counter
-import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from rake_nltk import Rake
 # Register
@@ -110,14 +109,15 @@ def analyze(request):
         Analyze.objects.create(user=request.user, analyze_text=analyze_text, tool_type="Sentiment Analysis", sentiment_score=compound_score,
             sentiment_label=sentiment_label,
             word_count=word_count, pos_score=scores['pos'],
-    neg_score=scores['neg'],
-    neu_score=scores['neu'])
+            neg_score=scores['neg'],
+            neu_score=scores['neu'])
         return JsonResponse({
             "score": scores['compound'],
             "pos": scores['pos'],
             "neg": scores['neg'],
             "neu": scores['neu'],
-            "labels": 'Positive' if scores['compound']>= 0.05 else 'Negative'
+            "labels": sentiment_label
+           
         })
     return render(request, "processor/analyze.html")
 
