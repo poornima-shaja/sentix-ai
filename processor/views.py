@@ -187,7 +187,7 @@ def extract_keyword(request):
         try:
             from rake_nltk import Rake
 
-            r = Rake(stopwords=[])   # ✅ FIXED
+            r = Rake(stopwords=[], language=None)   # ✅ FIXED
             r.extract_keywords_from_text(keyword_text)
             keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
 
