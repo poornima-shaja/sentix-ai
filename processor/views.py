@@ -12,7 +12,6 @@ from .models import *
 import string
 from collections import Counter
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from rake_nltk import Rake
 
 
 # Register
@@ -185,14 +184,30 @@ def extract_keyword(request):
         keyword_text = request.POST.get("keyword_text", "")
 
         try:
-            from rake_nltk import Rake
+            import string
+            from collections import Counter
 
-            r = Rake(stopwords=[], language=None)   # ✅ FIXED
-            r.extract_keywords_from_text(keyword_text)
-            keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
+            # Clean text
+            words = keyword_text.lower().translate(
+                str.maketrans('', '', string.punctuation)
+            ).split()
+
+            # Remove common stopwords manually
+            stopwords = {
+                "the","is","and","in","to","of","a","for","on","with",
+                "as","by","an","at","from","that","this","it"
+            }
+
+            filtered_words = [w for w in words if w not in stopwords]
+
+            # Count frequency
+            word_freq = Counter(filtered_words)
+
+            # Get top 10 keywords
+            keywords = [word for word, _ in word_freq.most_common(10)]
 
         except Exception as e:
-            print("RAKE ERROR:", e)
+            print("KEYWORD ERROR:", e)
             keywords = ["Keyword extraction failed"]
 
         obj = Analyze.objects.create(
