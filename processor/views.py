@@ -1,6 +1,7 @@
 import nltk
 
 nltk.data.path.append('/opt/render/nltk_data')
+nltk.download('vader_lexicon')
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -12,6 +13,7 @@ from .models import *
 import string
 from collections import Counter
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from rake_nltk import Rake
 
 
 # Register
@@ -98,7 +100,12 @@ def analyze(request):
         tokenized_words = cleaned_text.split()
         word_count = len(tokenized_words)
 
-        sid = SentimentIntensityAnalyzer()
+        try:
+            sid = SentimentIntensityAnalyzer()
+        except:
+            import nltk
+            nltk.download('vader_lexicon')
+            sid = SentimentIntensityAnalyzer()
         scores = sid.polarity_scores(analyze_text)
         compound_score = scores['compound']
         if compound_score >= 0.05:
