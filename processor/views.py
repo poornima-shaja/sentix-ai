@@ -183,11 +183,15 @@ def summarize(request):
         "original": original_text
     })
 
+
+from nltk.corpus import stopwords
+
+r = Rake(stopwords=stopwords.words('english'))
 # poem_generate
 def extract_keyword(request):
     if request.method == "POST":
         keyword_text=request.POST.get("keyword_text", "")
-        r = Rake(stopwords=nltk.corpus.stopwords.words('english'))
+        r = Rake(stopwords=stopwords.words('english'))
         r.extract_keywords_from_text(keyword_text)
         keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
         obj = Analyze.objects.create(user=request.user, tool_type="Extract Keyword", analyze_text=keyword_text,
