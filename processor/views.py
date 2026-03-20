@@ -14,9 +14,6 @@ from collections import Counter
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from rake_nltk import Rake
 
-nltk.download('vader_lexicon', download_dir='/opt/render/nltk_data')
-nltk.download('punkt', download_dir='/opt/render/nltk_data')
-nltk.download('stopwords', download_dir='/opt/render/nltk_data')
 
 # Register
 def register(request):
@@ -188,8 +185,6 @@ def extract_keyword(request):
         keyword_text = request.POST.get("keyword_text", "")
 
         try:
-            from rake_nltk import Rake
-
             r = Rake()   # ← simple, no stopwords
             r.extract_keywords_from_text(keyword_text)
             keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
