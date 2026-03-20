@@ -13,6 +13,11 @@ import string
 from collections import Counter
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from rake_nltk import Rake
+
+nltk.download('vader_lexicon', download_dir='/opt/render/nltk_data')
+nltk.download('punkt', download_dir='/opt/render/nltk_data')
+nltk.download('stopwords', download_dir='/opt/render/nltk_data')
+
 # Register
 def register(request):
     if request.method == "POST":
@@ -182,7 +187,7 @@ def summarize(request):
 def extract_keyword(request):
     if request.method == "POST":
         keyword_text=request.POST.get("keyword_text", "")
-        r = Rake()
+        r = Rake(stopwords=nltk.corpus.stopwords.words('english'))
         r.extract_keywords_from_text(keyword_text)
         keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
         obj = Analyze.objects.create(user=request.user, tool_type="Extract Keyword", analyze_text=keyword_text,
