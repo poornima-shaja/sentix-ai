@@ -189,18 +189,14 @@ def extract_keyword(request):
 
         try:
             from rake_nltk import Rake
-            import nltk
-            from nltk.corpus import stopwords
 
-            nltk.data.path.append('/opt/render/nltk_data')
-
-            r = Rake(stopwords=set(stopwords.words('english')))
+            r = Rake()   # ← simple, no stopwords
             r.extract_keywords_from_text(keyword_text)
             keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
 
         except Exception as e:
             print("RAKE ERROR:", e)
-            keywords = ["Error extracting keywords"]
+            keywords = ["Keyword extraction failed"]
 
         obj = Analyze.objects.create(
             user=request.user,
