@@ -185,7 +185,9 @@ def extract_keyword(request):
         keyword_text = request.POST.get("keyword_text", "")
 
         try:
-            r = Rake()   # ← simple, no stopwords
+            from rake_nltk import Rake
+
+            r = Rake(stopwords=[])   # ✅ FIXED
             r.extract_keywords_from_text(keyword_text)
             keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
 
