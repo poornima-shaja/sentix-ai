@@ -183,21 +183,36 @@ def summarize(request):
         "original": original_text
     })
 
-
-from nltk.corpus import stopwords
-
-r = Rake(stopwords=stopwords.words('english'))
-# poem_generate
 def extract_keyword(request):
     if request.method == "POST":
-        keyword_text=request.POST.get("keyword_text", "")
-        r = Rake(stopwords=stopwords.words('english'))
-        r.extract_keywords_from_text(keyword_text)
-        keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
-        obj = Analyze.objects.create(user=request.user, tool_type="Extract Keyword", analyze_text=keyword_text,
-                                     word_count=len(keyword_text.split()), keyword_text=", ".join(keywords))
+        keyword_text = request.POST.get("keyword_text", "")
+
+        try:
+            from rake_nltk import Rake
+            import nltk
+            from nltk.corpus import stopwords
+
+            nltk.data.path.append('/opt/render/nltk_data')
+
+            r = Rake(stopwords=set(stopwords.words('english')))
+            r.extract_keywords_from_text(keyword_text)
+            keywords = [k.strip() for k in r.get_ranked_phrases()[:10]]
+
+        except Exception as e:
+            print("RAKE ERROR:", e)
+            keywords = ["Error extracting keywords"]
+
+        obj = Analyze.objects.create(
+            user=request.user,
+            tool_type="Extract Keyword",
+            analyze_text=keyword_text,
+            word_count=len(keyword_text.split()),
+            keyword_text=", ".join(keywords)
+        )
+
         return JsonResponse({
-                "keywords":keywords,
-                'id': obj.id
-            })
+            "keywords": keywords,
+            "id": obj.id
+        })
+
     return render(request, "processor/extract_keyword.html")
