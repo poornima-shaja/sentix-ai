@@ -4,21 +4,6 @@ import os
 nltk_data_path = os.path.join(os.path.dirname(__file__), 'nltk_data')
 nltk.data.path.append(nltk_data_path)
 
-try:
-    nltk.data.find('sentiment/vader_lexicon')
-except:
-    nltk.download('vader_lexicon', download_dir=nltk_data_path)
-
-try:
-    nltk.data.find('tokenizers/punkt')
-except:
-    nltk.download('punkt', download_dir=nltk_data_path)
-
-try:
-    nltk.data.find('corpora/stopwords')
-except:
-    nltk.download('stopwords', download_dir=nltk_data_path)
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
