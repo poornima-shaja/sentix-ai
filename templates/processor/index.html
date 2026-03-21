@@ -10,7 +10,7 @@
     <div class="row">
 
     <!-- Total Usage -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-12 col-sm-6 col-md-6 col-xl-3 mb-4">
         <div class="card border-left-dark h-100 py-2 shadow-sm">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -113,7 +113,7 @@
                                     </td>
                                     <td>
                                         <a href="{% url 'details' i.id %}" class="text-decoration-none text-primary">
-                                            {{ i.analyze_text|truncatechars:40 }}
+                                            View Preview
                                         </a>
                                         </td>
 
@@ -147,7 +147,7 @@
             <h6 class="m-0 font-weight-bold text-dark">Usage Distribution</h6>
         </div>
         <div class="card-body">
-            <div style="height: 350px;">
+            <div style="height: 250px; width: 100%;">
                 <canvas id="usageChart"></canvas>
             </div>
         </div>
@@ -200,5 +200,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+options: {
+    responsive: true,
+    maintainAspectRatio: false
+}
 </script>
 {% endblock %}
