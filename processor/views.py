@@ -13,7 +13,6 @@ from .models import *
 import string
 from collections import Counter
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from rake_nltk import Rake
 
 
 # Register
